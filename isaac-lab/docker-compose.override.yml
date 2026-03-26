@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+services:
+  vscode:
+    build:
+      context: ./vscode
+      network: host
+
+  nginx:
+    build:
+      context: ./nginx
+      network: host
+    ports:
+      - ${DEV_NGINX_PORT:-8080}:80

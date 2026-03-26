@@ -1,0 +1,9 @@
+{
+  "workbench.startupEditor": "readme",
+  "simpleBrowser.focusLockIndicator.enabled": false,
+  "python.envFile": "${workspaceFolder}/brev_isaacsim_experiment_delivery/.env",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/brev_isaacsim_experiment_delivery"
+  ],
+  "jupyter.notebookFileRoot": "${workspaceFolder}/brev_isaacsim_experiment_delivery"
+}

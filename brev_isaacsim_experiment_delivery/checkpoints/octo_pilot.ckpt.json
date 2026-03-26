@@ -1,0 +1,8 @@
+{
+  "policy": "octo",
+  "num_samples": 175,
+  "train_mae": 0.179639,
+  "mean_confidence": 0.79693,
+  "calibration_temperature": 2.0,
+  "noise_scale": 0.07491
+}

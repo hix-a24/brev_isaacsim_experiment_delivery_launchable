@@ -1,0 +1,8 @@
+{
+  "policy": "openvla",
+  "num_samples": 183,
+  "train_mae": 0.178377,
+  "mean_confidence": 0.716817,
+  "calibration_temperature": 2.0,
+  "noise_scale": 0.059594
+}

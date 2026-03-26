@@ -1,0 +1,39 @@
+{
+  "config": "configs/pilot_config.yaml",
+  "seed": 13,
+  "episodes_per_condition": 5,
+  "max_steps": 60,
+  "checkpoint_metrics": [
+    {
+      "checkpoint": "checkpoints/openvla_pilot.ckpt",
+      "policy": "openvla",
+      "num_samples": 183,
+      "train_mae": 0.178377,
+      "mean_confidence": 0.716817,
+      "calibration_temperature": 2.0,
+      "noise_scale": 0.059594
+    },
+    {
+      "checkpoint": "checkpoints/octo_pilot.ckpt",
+      "policy": "octo",
+      "num_samples": 175,
+      "train_mae": 0.179639,
+      "mean_confidence": 0.79693,
+      "calibration_temperature": 2.0,
+      "noise_scale": 0.07491
+    }
+  ],
+  "totals": {
+    "episodes": 300,
+    "successes": 297,
+    "collisions": 120,
+    "interventions": 1363,
+    "fallbacks": 1019,
+    "contacts": 257
+  },
+  "aggregate": {
+    "success_rate": 0.99,
+    "collision_rate": 0.313333,
+    "avg_interventions": 4.543333
+  }
+}

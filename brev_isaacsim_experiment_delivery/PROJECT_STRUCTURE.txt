@@ -1,0 +1,74 @@
+This file documents the layout of the `brev_isaacsim_experiment_delivery` repository at the time of handoff.  Use it as a quick reference for locating scripts, notebooks, configuration files and results.
+
+```
+brev_isaacsim_experiment_delivery/
+├── README.md                     # Overview of the experiment and workflow
+├── SYSTEM_VERSIONS.md            # Recorded versions of all major software packages and hardware
+├── PAPER_UPDATE_NOTES.md         # Discrepancies between the paper and the Brev implementation
+├── PROJECT_STRUCTURE.txt         # This file
+├── setup/                        # Installation and launch scripts
+│   ├── install.sh                # Automates environment setup and dependency installation
+│   ├── launch.sh                 # Starts the experiment services (e.g. via docker compose)
+│   ├── Dockerfile                # Base image definition for containerized services
+│   └── docker-compose.yml        # Defines simulator, policy, supervisor, planner and analysis services
+├── src/                          # Source code implementing tasks, policies, supervisor, planner and logging
+│   ├── __init__.py               # Makes src a package
+│   ├── utils/                    # Utilities for configuration loading and metrics
+│   │   ├── __init__.py
+│   │   └── config.py            # Load and validate YAML configs
+│   ├── tasks/                    # Isaac Sim scene definitions and randomization scripts
+│   │   ├── __init__.py
+│   │   ├── task_a.py            # Drawer–object task definition and randomizer
+│   │   └── task_b.py            # Cluttered pick‑and‑sort task definition and randomizer
+│   ├── policy/                   # Policy wrappers for OpenVLA and Octo
+│   │   ├── __init__.py
+│   │   ├── base_policy.py       # Base class for VLA policies
+│   │   ├── openvla_policy.py    # OpenVLA wrapper with MC dropout support
+│   │   └── octo_policy.py       # Octo wrapper (ensemble)
+│   ├── supervisor/              # Safety supervisor, calibration and gating logic
+│   │   ├── __init__.py
+│   │   ├── calibrator.py        # Temperature scaling and calibration routines
+│   │   ├── risk_estimator.py    # Maps raw model outputs to failure risk
+│   │   ├── gating.py            # Implements the hysteresis state machine
+│   │   └── reobserve.py         # Pause/reobserve strategy implementation
+│   ├── planner/                 # Fallback planning using MoveIt 2
+│   │   ├── __init__.py
+│   │   └── fallback_planner.py  # High‑level planner interface and primitive sequences
+│   ├── logger/                  # Logging utilities and schema definitions
+│   │   ├── __init__.py
+│   │   ├── episode_logger.py    # Episode‑level logging
+│   │   ├── step_logger.py       # Step‑level logging
+│   │   ├── intervention_logger.py # Intervention logging
+│   │   └── contact_logger.py    # Contact/proximity logging
+│   └── analysis/                # Figure generation scripts
+│       ├── __init__.py
+│       └── render_figures.py    # Reads logs and produces Figures 6–10
+├── configs/                     # YAML configuration files
+│   ├── default_config.yaml      # Full‑scale experiment parameters
+│   ├── pilot_config.yaml        # Reduced parameters for quick pilot runs
+│   └── full_config.yaml         # Placeholder for future large‑scale runs
+├── notebooks/                   # Jupyter notebooks for orchestration (pilot and full runs)
+│   ├── 01_generate_demos.ipynb  # Script to collect demonstrations
+│   ├── 02_fine_tune_policy.ipynb # Fine‑tuning and policy training
+│   ├── 03_calibrate_eval.ipynb  # Calibration and evaluation under domain shift
+│   └── 04_generate_figures.ipynb # Notebook to run figure generation scripts
+├── data_logs/                   # Folder to store logged tables (episodes, steps, interventions, contacts)
+│   └── SCHEMA.md                # Description of logging schema and column definitions
+├── runs/                        # Outputs from each run (logs, videos, metrics, figures)
+│   └── (run folders)            # Each run creates its own subfolder
+├── figures/                     # Final exported figures (PNG/PDF) generated from logs
+│   ├── fig6_success_collision.png
+│   ├── fig7_robustness_curves.png
+│   ├── fig8_calibration.png
+│   ├── fig9_interventions.png
+│   ├── fig10_safety_characterization.png
+│   └── (additional formats)
+├── report/                      # Final implementation report
+│   └── FINAL_IMPLEMENTATION_REPORT.md
+└── handoff/                     # Bundle for transfer
+    ├── experiment_delivery.zip  # Archive of the entire folder
+    └── HANDOFF_CHECKLIST.md    # Checklist for the recipient
+
+```
+
+This structure may evolve slightly as implementation proceeds, but the core components (setup scripts, source modules, configs, notebooks, data logs, figures and report) should remain consistent.  Any additional files created during experimentation (e.g. policy checkpoints, demonstration recordings) should be placed under `runs/` or an appropriate subdirectory and noted in the README and final report.

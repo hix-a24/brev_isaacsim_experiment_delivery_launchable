@@ -1,0 +1,42 @@
+# Default configuration for the uncertainty‑calibrated safety gating experiment
+#
+# This YAML file defines the full‑scale experiment parameters.  Modify these
+# values to adjust tasks, demonstration counts, shift severities, policy
+# settings and logging options.
+
+tasks:
+  drawer:
+    demo_count: 50            # number of demonstrations for Task A (drawer‑object)
+    initial_seed: 0
+    shift_severities: [0, 1, 2, 3]  # four levels: training, mild, moderate, extreme
+  clutter_sort:
+    demo_count: 70            # number of demonstrations for Task B (cluttered pick‑and‑sort)
+    initial_seed: 0
+    shift_severities: [0, 1, 2, 3]
+
+policies:
+  openvla:
+    checkpoint: "checkpoints/openvla.ckpt"
+    num_mc_samples: 20        # number of Monte Carlo dropout samples
+  octo:
+    checkpoint: "checkpoints/octo.ckpt"
+    ensemble_size: 5          # number of ensemble members
+
+gating:
+  delta_low: 0.2             # hysteresis threshold δ_low【725427445771147†L470-L522】
+  delta_high: 0.5            # hysteresis threshold δ_high
+  alpha: 0.5                 # weight on uncertainty variance in risk estimation
+  beta: 0.5                  # weight on uncertainty entropy in risk estimation
+
+logging:
+  episodes_path: "data_logs/episodes.csv"
+  steps_path: "data_logs/steps.csv"
+  interventions_path: "data_logs/interventions.csv"
+  contacts_path: "data_logs/contacts.csv"
+  save_videos: true
+  videos_dir: "runs/videos"
+
+evaluation:
+  num_seeds: 3               # number of random seeds for evaluation
+  episodes_per_condition: 100 # number of episodes for each combination of task × shift axis × severity × method
+  max_steps_per_episode: 500  # limit on simulation steps before timeout

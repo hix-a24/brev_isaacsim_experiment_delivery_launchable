@@ -1,0 +1,42 @@
+# Pilot configuration for the uncertainty‑calibrated safety gating experiment
+#
+# This configuration reduces the number of demonstrations, seeds and episodes
+# to minimise compute and cost.  Use this config for smoke tests or when
+# running on limited budget (e.g. $10 Brev credit).
+
+tasks:
+  drawer:
+    demo_count: 10
+    initial_seed: 0
+    shift_severities: [0, 1, 2]  # drop the extreme level for the pilot
+  clutter_sort:
+    demo_count: 15
+    initial_seed: 0
+    shift_severities: [0, 1, 2]
+
+policies:
+  openvla:
+    checkpoint: "checkpoints/openvla_pilot.ckpt"
+    num_mc_samples: 10
+  octo:
+    checkpoint: "checkpoints/octo_pilot.ckpt"
+    ensemble_size: 3
+
+gating:
+  delta_low: 0.2
+  delta_high: 0.5
+  alpha: 0.5
+  beta: 0.5
+
+logging:
+  episodes_path: "data_logs/episodes.csv"
+  steps_path: "data_logs/steps.csv"
+  interventions_path: "data_logs/interventions.csv"
+  contacts_path: "data_logs/contacts.csv"
+  save_videos: false
+  videos_dir: "runs/videos"
+
+evaluation:
+  num_seeds: 1
+  episodes_per_condition: 5
+  max_steps_per_episode: 200

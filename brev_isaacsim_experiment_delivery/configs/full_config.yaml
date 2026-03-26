@@ -1,0 +1,43 @@
+# Full configuration placeholder
+#
+# This file is reserved for future large‑scale experiments beyond the default
+# parameters.  Copy the contents of `default_config.yaml` here and adjust
+# demonstration counts, seeds, episode counts and other parameters as
+# necessary for your research.  Currently this file duplicates the default.
+
+tasks:
+  drawer:
+    demo_count: 50
+    initial_seed: 0
+    shift_severities: [0, 1, 2, 3]
+  clutter_sort:
+    demo_count: 70
+    initial_seed: 0
+    shift_severities: [0, 1, 2, 3]
+
+policies:
+  openvla:
+    checkpoint: "checkpoints/openvla.ckpt"
+    num_mc_samples: 20
+  octo:
+    checkpoint: "checkpoints/octo.ckpt"
+    ensemble_size: 5
+
+gating:
+  delta_low: 0.2
+  delta_high: 0.5
+  alpha: 0.5
+  beta: 0.5
+
+logging:
+  episodes_path: "data_logs/episodes.csv"
+  steps_path: "data_logs/steps.csv"
+  interventions_path: "data_logs/interventions.csv"
+  contacts_path: "data_logs/contacts.csv"
+  save_videos: true
+  videos_dir: "runs/videos"
+
+evaluation:
+  num_seeds: 3
+  episodes_per_condition: 100
+  max_steps_per_episode: 500

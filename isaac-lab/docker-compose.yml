@@ -1,0 +1,46 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+
+volumes:
+  ov-cache:
+  ov-local-share:
+
+services:
+  vscode:
+    container_name: brev-isaacsim-vscode
+    network_mode: "host"
+    runtime: nvidia
+    volumes:
+      - "../:/workspace:rw"
+      - "ov-cache:/home/isaac-sim/.cache/ov:rw"
+      - "ov-local-share:/home/isaac-sim/.local/share/ov/:rw"
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_GPU_CAPABILITIES=all
+      - PUID=0
+      - PGID=0
+      - TZ=Etc/UTC
+      - PASSWORD=${VSCODE_PASSWORD:-}
+      - SUDO_PASSWORD=${VSCODE_PASSWORD:-}
+      - WORKSPACE_DIR=/workspace
+      - PROJECT_DIR=/workspace/brev_isaacsim_experiment_delivery
+      - KUBECONFIG=/kube/config
+    restart: unless-stopped
+
+  nginx:
+    container_name: brev-isaacsim-nginx
+    network_mode: "host"
+    depends_on:
+      - vscode
+    restart: unless-stopped
+
+  web-viewer:
+    container_name: brev-isaacsim-web-viewer
+    restart: unless-stopped
+    build:
+      context: ./web-viewer-sample
+      network: host
+    network_mode: "host"
+    environment:
+      - ENV=brev

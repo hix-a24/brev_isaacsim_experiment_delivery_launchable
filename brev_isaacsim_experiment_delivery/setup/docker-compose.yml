@@ -1,0 +1,93 @@
+version: "3.8"
+
+# docker-compose.yml – Define services for the simulation experiment
+#
+# This compose file brings up the following services:
+#
+#  * **simulator** – Runs Isaac Sim in headless mode with GPU support.  Mounts
+#    the repository to access USD scenes and randomization scripts.
+#  * **policy_runner** – Loads the trained vision‑language‑action policy (OpenVLA
+#    or Octo) and communicates with the simulator over ROS 2 or sockets.
+#  * **supervisor** – Implements the uncertainty‑calibrated safety gating logic
+#    and triggers fallback actions when necessary.
+#  * **planner** – Runs MoveIt 2 inside ROS 2 to generate fallback trajectories.
+#  * **analysis** – Reads log files and generates figures.
+
+services:
+  simulator:
+    build:
+      context: ..
+      dockerfile: setup/Dockerfile
+    image: brev_simulator:latest
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - SIM_HEADLESS=1
+    volumes:
+      - ../src:/app/src:ro
+      - ../configs:/app/configs:ro
+      - ../runs:/app/runs
+      - ../data_logs:/app/data_logs
+    command: ["bash", "-c", "echo Running simulator placeholder. Replace with Isaac Sim invocation."]
+
+  policy_runner:
+    build:
+      context: ..
+      dockerfile: setup/Dockerfile
+    image: brev_policy_runner:latest
+    depends_on:
+      - simulator
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ../src:/app/src:ro
+      - ../runs:/app/runs
+      - ../configs:/app/configs:ro
+    command: ["bash", "-c", "echo Running policy runner placeholder. Replace with real policy script."]
+
+  supervisor:
+    build:
+      context: ..
+      dockerfile: setup/Dockerfile
+    image: brev_supervisor:latest
+    depends_on:
+      - policy_runner
+    volumes:
+      - ../src:/app/src:ro
+      - ../runs:/app/runs
+      - ../configs:/app/configs:ro
+    command: ["bash", "-c", "echo Running supervisor placeholder. Replace with gating service."]
+
+  planner:
+    build:
+      context: ..
+      dockerfile: setup/Dockerfile
+    image: brev_planner:latest
+    depends_on:
+      - supervisor
+    volumes:
+      - ../src:/app/src:ro
+      - ../runs:/app/runs
+      - ../configs:/app/configs:ro
+    command: ["bash", "-c", "echo Running planner placeholder. Replace with MoveIt service."]
+
+  analysis:
+    build:
+      context: ..
+      dockerfile: setup/Dockerfile
+    image: brev_analysis:latest
+    depends_on:
+      - simulator
+    volumes:
+      - ../src:/app/src:ro
+      - ../figures:/app/figures
+      - ../data_logs:/app/data_logs
+      - ../runs:/app/runs
+    command: ["bash", "-c", "echo Running analysis placeholder. Replace with figure generation script."]
+
+# Notes:
+# - Each service uses the same base Dockerfile for simplicity.  In a real
+#   deployment you may build specialised images (e.g. for Isaac Sim with
+#   proprietary dependencies).  Adjust the build contexts accordingly.
+# - The `depends_on` directives express startup order but do not provide
+#   health checks.  Implement your own readiness probes if needed.
